@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/fragment_main_padding"
+    tools:context="com.doomdev.fybersampel.presentation.view.fragment.ApiConnectionFragment">
+
+    <TextView
+        android:id="@+id/api_layout_main_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/api_connection_info"
+        android:textSize="@dimen/text_size_main_info" />
+
+    <LinearLayout
+        android:id="@+id/api_layout_uid"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/api_layout_main_info"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_input_form_info"
+            android:layout_weight="1"
+            android:text="@string/api_connection_param_uid" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/text_size_edit_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/api_layout_key"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/api_layout_uid"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_input_form_info"
+            android:text="@string/api_connection_param_api_key" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/text_size_edit_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/api_layout_appid"
+        android:orientation="horizontal"
+        android:layout_below="@+id/api_layout_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_input_form_info"
+            android:text="@string/api_connection_param_appid" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/text_size_edit_view" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/api_layout_pub0"
+        android:orientation="horizontal"
+        android:layout_below="@+id/api_layout_appid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_input_form_info"
+            android:text="@string/api_connection_param_pub0" />
+
+        <EditText
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textSize="@dimen/text_size_edit_view" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/api_layout_pub0"
+        android:layout_alignParentRight="true"
+        android:text="@string/api_connection_connect_btn"
+        />
+</RelativeLayout>
