@@ -1,15 +1,12 @@
 package com.doomdev.fybersampel.presentation.view.activity;
 
-import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.doomdev.fybersampel.R;
-import com.doomdev.fybersampel.presentation.view.fragment.ApiConnectionFragment;
-import com.doomdev.fybersampel.presentation.view.fragment.OfferListFragment;
-import com.doomdev.fybersampel.presentation.view.fragment.item.DummyContent;
+import com.doomdev.fybersampel.presentation.view.fragment.FyberConnectionFragment;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity  {
     private void initFragment(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, ApiConnectionFragment.instantiate(this,ApiConnectionFragment.class.getName())).commit();
+        transaction.replace(R.id.fragment_container, FyberConnectionFragment.instantiate(this, FyberConnectionFragment.class.getName())).commit();
     }
     private void changeFragment(android.support.v4.app.Fragment fragment, String name) {
         FragmentManager fragmentManager = getSupportFragmentManager();

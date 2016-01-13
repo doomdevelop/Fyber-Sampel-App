@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.Log;
 
 import com.doomdev.fybersampel.data.pojo.FyberResponse;
+import com.doomdev.fybersampel.data.pojo.request.RequestContent;
 import com.doomdev.fybersampel.domain.interactor.DefaultSubscriber;
 import com.doomdev.fybersampel.domain.interactor.FyberConnectionUseCase;
+import com.doomdev.fybersampel.domain.interactor.HashKeyCalculationUseCase;
 import com.doomdev.fybersampel.domain.interactor.LoadAdvertisingIdentifierUseCase;
 import com.doomdev.fybersampel.domain.interactor.UseCase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +41,28 @@ public class FyberConnectionPresenter extends Presenter {
         }
     }
 
-    public void callFyberApi(Map<String, String> params) {
-        UseCase useCase = new FyberConnectionUseCase(params);
-        useCase.execute(new FyberConnectionSubscriber());
-        addUseCase(useCase);
+    public void callFyberApi(final Map<String, String> params,final String apiKey) {
+        UseCase useCase = new HashKeyCalculationUseCase(params,apiKey);
+        useCase.execute(new DefaultSubscriber<RequestContent>() {
+            @Override
+            public void onCompleted() {
+                super.onCompleted();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+            }
+
+            @Override
+            public void onNext(RequestContent requestContent) {
+                super.onNext(requestContent);
+                UseCase useCaseRest = new FyberConnectionUseCase(requestContent);
+                useCaseRest.execute(new FyberConnectionSubscriber());
+                addUseCase(useCaseRest);
+            }
+        });
+
     }
 
     public void loadAdvertisingIdentifier(Context context) {
@@ -88,7 +109,8 @@ public class FyberConnectionPresenter extends Presenter {
 
         @Override
         public void onError(Throwable e) {
-            Log.d(TAG, "onError().." + e.getMessage());
+            e.printStackTrace();
+            Log.d(TAG, "onError().." + e.getMessage()+" "+e.toString());
             FyberConnectionPresenter.this.view.hideProgress();
             FyberConnectionPresenter.this.view.onError(((Exception) e).getMessage());
         }

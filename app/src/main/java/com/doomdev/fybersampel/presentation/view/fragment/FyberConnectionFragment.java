@@ -11,26 +11,35 @@ import android.view.ViewGroup;
 
 import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.data.pojo.FyberResponse;
+import com.doomdev.fybersampel.data.pojo.Offers;
 import com.doomdev.fybersampel.presentation.presenter.FyberConnectionPresenter;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ApiConnectionFragment.OnFragmentInteractionListener} interface
+ * {@link FyberConnectionFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ApiConnectionFragment#newInstance} factory method to
+ * Use the {@link FyberConnectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ApiConnectionFragment extends Fragment implements FyberConnectionPresenter.View {
+public class FyberConnectionFragment extends Fragment implements FyberConnectionPresenter.View {
 
     private OnFragmentInteractionListener mListener;
     private FyberConnectionPresenter presenter;
     private String devId = null;
+    private static final String TAG = FyberConnectionFragment.class.getSimpleName();
+    private static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
 
-    public ApiConnectionFragment() {
+    public FyberConnectionFragment() {
         // Required empty public constructor
     }
 
@@ -40,8 +49,8 @@ public class ApiConnectionFragment extends Fragment implements FyberConnectionPr
      *
      * @return A new instance of fragment ApiConnectionFragment.
      */
-    public static ApiConnectionFragment newInstance() {
-        ApiConnectionFragment fragment = new ApiConnectionFragment();
+    public static FyberConnectionFragment newInstance() {
+        FyberConnectionFragment fragment = new FyberConnectionFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -54,6 +63,7 @@ public class ApiConnectionFragment extends Fragment implements FyberConnectionPr
         this.presenter = new FyberConnectionPresenter(this);
         this.presenter.loadAdvertisingIdentifier(getContext());
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,7 +87,7 @@ public class ApiConnectionFragment extends Fragment implements FyberConnectionPr
         view.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.callFyberApi(getParamsMap());
+                presenter.callFyberApi(getParamsMap(),API_KEY);
             }
         });
     }
@@ -88,15 +98,18 @@ public class ApiConnectionFragment extends Fragment implements FyberConnectionPr
         map.put("format", "json");
         map.put("appid", "2070");
         map.put("uid", "spiderman");
-        map.put("locale", "DE");
+        map.put("locale", "de");
         map.put("ip", "109.235.143.113");
+        map.put("offer_types", "112");
+        map.put("timestamp",String.valueOf(System.currentTimeMillis() / 1000L));
         if (devId != null) {
             map.put("device_id", devId);
         }
-//        map.put("API Key", "1c915e3b5d42d05136185030892fbb846c278927");
         return map;
 
     }
+
+
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -117,15 +130,22 @@ public class ApiConnectionFragment extends Fragment implements FyberConnectionPr
     }
 
     @Override
-    public void onOffersLoaded(FyberResponse offerList) {
-        Log.d("MY APP", " onAdvertisingIdentifierLoaded(): " + offerList.toString());
+    public void onOffersLoaded(FyberResponse fyberResponse) {
+        Log.d(TAG, " onAdvertisingIdentifierLoaded(): " + fyberResponse.toString());
+        Log.d(TAG, " **************************  Offers  **********************");
+
+        Offers[] offers = fyberResponse.getOffers();
+        for(Offers offers1 : offers){
+            Log.d(TAG, offers1.toString());
+        }
 
     }
 
     @Override
     public void onAdvertisingIdentifierLoaded(String id) {
         this.devId = id;
-        Log.d("MY APP", " onAdvertisingIdentifierLoaded() " + devId);
+        Log.d(TAG, " onAdvertisingIdentifierLoaded() " + devId);
+
     }
 
     @Override
