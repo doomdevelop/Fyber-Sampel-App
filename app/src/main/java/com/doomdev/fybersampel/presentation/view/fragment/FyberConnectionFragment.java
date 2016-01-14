@@ -58,8 +58,9 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        Log.d(TAG, "onCreate()..");
         this.presenter = new FyberConnectionPresenter(this);
         this.presenter.loadAdvertisingIdentifier(getContext());
     }
@@ -127,6 +128,17 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**
+     * Called when the fragment is no longer in use.  This is called
+     * after {@link #onStop()} and before {@link #onDetach()}.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.presenter.destroy();
+        Log.d(TAG, "onDestroy()..");
     }
 
     @Override

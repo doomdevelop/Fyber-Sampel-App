@@ -1,6 +1,8 @@
 package com.doomdev.fybersampel.domain.interactor;
 
 
+import android.util.Log;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -20,7 +22,16 @@ public abstract class UseCase {
 
 
     private Subscription subscription = Subscriptions.empty();
+    private int id;
 
+
+    public  int getId(){
+        return id;
+    }
+
+    public UseCase (){
+        this.id = (int)System.currentTimeMillis();
+    }
 
 
     /**
@@ -35,6 +46,10 @@ public abstract class UseCase {
      */
     @SuppressWarnings("unchecked")
     public void execute(Observer useCaseSubscriber) {
+        if(useCaseSubscriber instanceof DefaultSubscriber){
+            Log.d("UseCase","set secase ID: "+id);
+            ( (DefaultSubscriber)useCaseSubscriber).setUseCaseId(id);
+        }
         this.subscription = this.buildUseCaseObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

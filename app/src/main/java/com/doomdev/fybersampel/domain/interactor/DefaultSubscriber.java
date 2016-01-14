@@ -10,6 +10,15 @@ import rx.Observer;
  * Default subscriber base class to be used whenever you want default error handling.
  */
 public class DefaultSubscriber<T> implements Observer<T> {
+    private int useCaseId;
+
+    public void setUseCaseId(int useCaseId){
+        this.useCaseId = useCaseId;
+    }
+    public int getUseCaseId(){
+        return useCaseId;
+    }
+
     @Override public void onCompleted() {
         // no-op by default.
     }

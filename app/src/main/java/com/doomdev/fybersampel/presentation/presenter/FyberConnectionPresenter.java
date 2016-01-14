@@ -11,9 +11,6 @@ import com.doomdev.fybersampel.domain.interactor.HashKeyCalculationUseCase;
 import com.doomdev.fybersampel.domain.interactor.LoadAdvertisingIdentifierUseCase;
 import com.doomdev.fybersampel.domain.interactor.UseCase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +20,7 @@ public class FyberConnectionPresenter extends Presenter {
     private static final String TAG = FyberConnectionPresenter.class.getSimpleName();
 
     private FyberConnectionPresenter.View view;
-    private static final List<UseCase> useCaseList = new ArrayList<UseCase>();
+
 
 
     public FyberConnectionPresenter(FyberConnectionPresenter.View view) {
@@ -31,15 +28,6 @@ public class FyberConnectionPresenter extends Presenter {
 
     }
 
-    private void addUseCase(UseCase useCase) {
-        useCaseList.add(useCase);
-    }
-
-    private void unsubscribeAllUsecases() {
-        for (UseCase useCase : useCaseList) {
-            useCase.unsubscribe();
-        }
-    }
 
     public void callFyberApi(final Map<String, String> params,final String apiKey) {
         UseCase useCase = new HashKeyCalculationUseCase(params,apiKey);
@@ -47,6 +35,7 @@ public class FyberConnectionPresenter extends Presenter {
             @Override
             public void onCompleted() {
                 super.onCompleted();
+                removeUseCase(getUseCaseId());
             }
 
             @Override
@@ -71,18 +60,19 @@ public class FyberConnectionPresenter extends Presenter {
         addUseCase(useCase);
     }
     @Override
-    void resume() {
+    public void resume() {
 
     }
 
     @Override
-    void pause() {
+   public void pause() {
 
     }
 
     @Override
-    void destroy() {
-        unsubscribeAllUsecases();
+   public void destroy() {
+        unsubscribeAllUseCases();
+        USE_CASES_LIST.clear();
     }
 
     public interface View {
@@ -104,28 +94,29 @@ public class FyberConnectionPresenter extends Presenter {
         @Override
         public void onCompleted() {
             Log.d(TAG, "onCompleted()..");
-            FyberConnectionPresenter.this.view.hideProgress();
+            view.hideProgress();
+            removeUseCase(getUseCaseId());
         }
 
         @Override
         public void onError(Throwable e) {
             e.printStackTrace();
             Log.d(TAG, "onError().." + e.getMessage()+" "+e.toString());
-            FyberConnectionPresenter.this.view.hideProgress();
-            FyberConnectionPresenter.this.view.onError(((Exception) e).getMessage());
+            view.hideProgress();
+            view.onError(((Exception) e).getMessage());
         }
 
         @Override
         public void onNext(FyberResponse offerList) {
             Log.d(TAG, "onNext().." + offerList.toString());
-            FyberConnectionPresenter.this.view.onOffersLoaded(offerList);
+            view.onOffersLoaded(offerList);
         }
     }
 
     private final class LoadAdvertisingIdentifierSubscriber extends DefaultSubscriber<String> {
         @Override
         public void onCompleted() {
-
+            removeUseCase(getUseCaseId());
         }
 
         @Override
@@ -136,7 +127,7 @@ public class FyberConnectionPresenter extends Presenter {
         @Override
         public void onNext(String s) {
             Log.d(TAG, "onNext().." + s);
-          FyberConnectionPresenter.this.view.onAdvertisingIdentifierLoaded(s);
+          view.onAdvertisingIdentifierLoaded(s);
         }
 
     }
