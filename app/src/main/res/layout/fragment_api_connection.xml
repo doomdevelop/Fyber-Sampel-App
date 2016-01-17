@@ -12,6 +12,13 @@
         android:gravity="center"
         android:text="@string/api_connection_info"
         android:textSize="@dimen/text_size_main_info" />
+    <TextView
+        android:id="@+id/api_layout_error_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="@dimen/text_size_main_info" />
 
     <LinearLayout
         android:id="@+id/api_layout_uid"

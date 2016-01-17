@@ -37,7 +37,10 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     private FyberConnectionPresenter presenter;
     private String devId = null;
     private static final String TAG = FyberConnectionFragment.class.getSimpleName();
-    private static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
+    public static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
+    public static final String API_KEY_FALSE = "1c915e3b5d42d05136185030892fbb846c27892";
+
+
 
     public FyberConnectionFragment() {
         // Required empty public constructor
@@ -97,7 +100,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
         Map<String, String> map = new TreeMap<>();
         map.put("format", "json");
-        map.put("appid", "2070");
+        map.put("appid", "20700");
         map.put("uid", "spiderman");
         map.put("locale", "de");
         map.put("ip", "109.235.143.113");

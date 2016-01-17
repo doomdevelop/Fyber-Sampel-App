@@ -1,10 +1,9 @@
 package com.doomdev.fybersampel.domain.interactor;
 
 
-import android.util.Log;
-
 import rx.Observable;
 import rx.Observer;
+import rx.Scheduler;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -13,7 +12,7 @@ import rx.subscriptions.Subscriptions;
 /**
  * This abstract class represents a execution unit for different use cases (this means any use case
  * in the application should implement this contract).
- *
+ * <p/>
  * By convention each UseCase implementation will return the result using a {@link rx.Subscriber}
  * that will execute its job in a background thread and will post the result in the UI thread.
  * Created by and on 08.01.16.
@@ -23,14 +22,23 @@ public abstract class UseCase {
 
     private Subscription subscription = Subscriptions.empty();
     private int id;
+    private Scheduler newThreadScheduler;
+    private Scheduler androidThread;
 
-
-    public  int getId(){
+    public int getId() {
         return id;
     }
 
-    public UseCase (){
-        this.id = (int)System.currentTimeMillis();
+    public UseCase() {
+        this.id = (int) System.currentTimeMillis();
+        this.newThreadScheduler = Schedulers.newThread();
+        this.androidThread = AndroidSchedulers.mainThread();
+    }
+
+    public UseCase(Scheduler newThreadScheduler,Scheduler androidThread) {
+        this.id = (int) System.currentTimeMillis();
+        this.newThreadScheduler = newThreadScheduler;
+        this.androidThread = androidThread;
     }
 
 
@@ -42,18 +50,18 @@ public abstract class UseCase {
     /**
      * Executes the current use case.
      *
-     * @param useCaseSubscriber The guy who will be listen to the observable build with {@link #buildUseCaseObservable()}.
+     * @param useCaseobserver The guy who will be listen to the observable build with {@link #buildUseCaseObservable()}.
      */
     @SuppressWarnings("unchecked")
-    public void execute(Observer useCaseSubscriber) {
-        if(useCaseSubscriber instanceof DefaultSubscriber){
-            Log.d("UseCase","set secase ID: "+id);
-            ( (DefaultSubscriber)useCaseSubscriber).setUseCaseId(id);
+    public void execute(Observer useCaseobserver) {
+        if (useCaseobserver instanceof DefaultObserver) {
+//            Log.d("UseCase","set secase ID: "+id);
+            ((DefaultObserver) useCaseobserver).setUseCaseId(id);
         }
         this.subscription = this.buildUseCaseObservable()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(useCaseSubscriber);
+                .subscribeOn(newThreadScheduler)
+                .observeOn(androidThread)
+                .subscribe(useCaseobserver);
     }
 
     /**

@@ -3,15 +3,10 @@ package com.doomdev.fybersampel.data.repository;
 import com.doomdev.fybersampel.data.pojo.request.RequestContent;
 import com.doomdev.fybersampel.data.service.rx.FyberConnectionServiceRx;
 import com.doomdev.fybersampel.data.net.RestApi;
-import com.doomdev.fybersampel.data.net.RestApiImpl;
 import com.doomdev.fybersampel.data.service.rx.RestServiceRxGenerator;
 import com.doomdev.fybersampel.data.pojo.FyberResponse;
-import com.doomdev.fybersampel.data.util.Converter;
-
-import java.util.Map;
 
 import rx.Observable;
-import rx.functions.Action;
 
 /**
  * Created by and on 11.01.16.

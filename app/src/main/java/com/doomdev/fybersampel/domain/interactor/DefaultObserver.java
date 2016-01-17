@@ -9,8 +9,8 @@ import rx.Observer;
 /**
  * Default subscriber base class to be used whenever you want default error handling.
  */
-public class DefaultSubscriber<T> implements Observer<T> {
-    private int useCaseId;
+public class DefaultObserver<T> implements Observer<T> {
+    private int useCaseId = 0;
 
     public void setUseCaseId(int useCaseId){
         this.useCaseId = useCaseId;
