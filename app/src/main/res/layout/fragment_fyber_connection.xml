@@ -1,113 +1,158 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/fragment_main_padding"
-    tools:context=".presentation.view.fragment.FyberConnectionFragment">
+    android:layout_height="match_parent">
 
-   <TextView
-        android:id="@+id/api_layout_main_info"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/api_connection_info"
-        android:textSize="@dimen/text_size_main_info" />
-    <TextView
-        android:id="@+id/api_layout_error_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@android:color/holo_red_light"
-        android:textSize="@dimen/text_size_main_info" />
-
-    <LinearLayout
-        android:id="@+id/api_layout_uid"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/api_layout_main_info"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_input_form_info"
-            android:layout_weight="1"
-            android:text="@string/api_connection_param_uid" />
-
-        <EditText
-            android:id="@+id/api_layout_uid_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="@dimen/text_size_edit_view" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/api_layout_key"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/api_layout_uid"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:padding="@dimen/fragment_main_padding"
+        tools:context=".presentation.view.fragment.FyberConnectionFragment">
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/text_view_main_info"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_input_form_info"
-            android:text="@string/api_connection_param_api_key" />
+            android:gravity="center"
+            android:text="@string/api_connection_info"
+            android:textSize="@dimen/text_size_main_info" />
 
-        <EditText
-            android:layout_width="0dp"
+
+        <LinearLayout
+            android:id="@+id/layout_uid"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="@dimen/text_size_edit_view" />
-    </LinearLayout>
+            android:layout_below="@+id/text_view_main_info"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/api_layout_appid"
-        android:orientation="horizontal"
-        android:layout_below="@+id/api_layout_key"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/api_connection_param_uid"
+                android:textSize="@dimen/text_size_input_form_info" />
+
+            <EditText
+                android:id="@+id/edit_text_uid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_size_edit_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_api_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_uid"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/api_connection_param_api_key"
+                android:textSize="@dimen/text_size_input_form_info" />
+
+            <EditText
+                android:id="@+id/edit_text_api_key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_size_edit_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_appid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_api_key"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/api_connection_param_appid"
+                android:textSize="@dimen/text_size_input_form_info" />
+
+            <EditText
+                android:id="@+id/edit_text_appid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_size_edit_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_appid"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/api_connection_param_ip"
+                android:textSize="@dimen/text_size_input_form_info" />
+
+            <EditText
+                android:id="@+id/edit_text_ip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_size_edit_view" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_locale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_ip"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/api_connection_param_locale"
+                android:textSize="@dimen/text_size_input_form_info" />
+
+            <EditText
+                android:id="@+id/edit_text_locale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="@dimen/text_size_edit_view" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/layout_locale"
+            android:text="@string/api_connection_connect_btn" />
+
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_input_form_info"
-            android:text="@string/api_connection_param_appid" />
+            android:id="@+id/text_view_error_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/btn_connect"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="@dimen/text_size_error_msg"
+            android:visibility="gone" />
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="@dimen/text_size_edit_view" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/api_layout_pub0"
-        android:orientation="horizontal"
-        android:layout_below="@+id/api_layout_appid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_input_form_info"
-            android:text="@string/api_connection_param_pub0" />
-
-        <EditText
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:textSize="@dimen/text_size_edit_view" />
-    </LinearLayout>
-    <Button
-        android:id="@+id/btn_connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/api_layout_pub0"
-        android:layout_alignParentRight="true"
-        android:text="@string/api_connection_connect_btn"
-        />
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progres_bar_api_call"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+</ScrollView>

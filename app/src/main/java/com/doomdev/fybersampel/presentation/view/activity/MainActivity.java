@@ -8,12 +8,15 @@ import android.os.Bundle;
 import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.presentation.view.fragment.FyberConnectionFragment;
 
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity  {
 
     private android.support.v4.app.Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
         setContentView(R.layout.activity_main);
         if(savedInstanceState == null){
             initFragment();

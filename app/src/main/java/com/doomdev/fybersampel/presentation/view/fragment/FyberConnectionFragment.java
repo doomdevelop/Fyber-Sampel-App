@@ -8,20 +8,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.data.pojo.FyberResponse;
 import com.doomdev.fybersampel.data.pojo.Offers;
+import com.doomdev.fybersampel.presentation.util.FyberParameterDemoHelper;
 import com.doomdev.fybersampel.presentation.presenter.FyberConnectionPresenter;
+import com.doomdev.fybersampel.presentation.util.Params;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,12 +35,29 @@ import java.util.TreeMap;
 public class FyberConnectionFragment extends Fragment implements FyberConnectionPresenter.View {
 
     private OnFragmentInteractionListener mListener;
-    private FyberConnectionPresenter presenter;
-    private String devId = null;
+    private FyberConnectionPresenter mPresenter;
+    private FyberParameterDemoHelper fyberParameterDemoHelper;
     private static final String TAG = FyberConnectionFragment.class.getSimpleName();
     public static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
     public static final String API_KEY_FALSE = "1c915e3b5d42d05136185030892fbb846c27892";
 
+    @Bind(R.id.text_view_main_info)
+    protected TextView mTextViewMainInfo;
+    @Bind(R.id.text_view_error_msg)
+    protected TextView mTextViewErrorMsg;
+    @Bind(R.id.edit_text_api_key)
+    protected EditText mEditTextApiKey;
+    @Bind(R.id.edit_text_uid)
+    protected EditText mEditTextUid;
+    @Bind(R.id.edit_text_ip)
+    protected EditText mEditTextIp;
+    @Bind(R.id.edit_text_locale)
+    protected EditText mEditTextLocale;
+    @Bind(R.id.edit_text_appid)
+    protected EditText mEditTextAppid;
+
+    @Bind(R.id.progres_bar_api_call)
+    protected ProgressBar mProgressBar;
 
 
     public FyberConnectionFragment() {
@@ -63,16 +81,26 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
         Log.d(TAG, "onCreate()..");
-        this.presenter = new FyberConnectionPresenter(this);
-        this.presenter.loadAdvertisingIdentifier(getContext());
+        this.fyberParameterDemoHelper = new FyberParameterDemoHelper();
+        this.mPresenter = new FyberConnectionPresenter(this);
+        this.mPresenter.loadAdvertisingIdentifier(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_api_connection, container, false);
+        View view =  inflater.inflate(R.layout.fragment_fyber_connection, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     /**
@@ -88,30 +116,23 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.btn_connect).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.callFyberApi(getParamsMap(),API_KEY);
-            }
-        });
+    }
+    @OnClick(R.id.btn_connect)
+    protected void callFyberApi(){
+        mProgressBar.setVisibility(View.VISIBLE);
+        mPresenter.callFyberApi(fyberParameterDemoHelper.prepareAndGetParams(), API_KEY);
+    }
+    @OnLongClick(R.id.btn_connect)
+    protected boolean loadSampelParameterInFields(){
+//        mEditTextApiKey.setText(FyberDemoCall.Params.APPID);
+        mEditTextIp.setText(Params.IP.getValue());
+        mEditTextLocale.setText(Params.LOCALE.getValue());
+        mEditTextUid.setText(Params.UID.getValue());
+        mEditTextAppid.setText(Params.APPID.getValue());
+        getView().requestLayout();
+        return true;
     }
 
-    private Map<String, String> getParamsMap() {
-
-        Map<String, String> map = new TreeMap<>();
-        map.put("format", "json");
-        map.put("appid", "20700");
-        map.put("uid", "spiderman");
-        map.put("locale", "de");
-        map.put("ip", "109.235.143.113");
-        map.put("offer_types", "112");
-        map.put("timestamp",String.valueOf(System.currentTimeMillis() / 1000L));
-        if (devId != null) {
-            map.put("device_id", devId);
-        }
-        return map;
-
-    }
 
 
 
@@ -140,7 +161,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.presenter.destroy();
+        this.mPresenter.destroy();
         Log.d(TAG, "onDestroy()..");
     }
 
@@ -158,24 +179,26 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     @Override
     public void onAdvertisingIdentifierLoaded(String id) {
-        this.devId = id;
-        Log.d(TAG, " onAdvertisingIdentifierLoaded() " + devId);
+        Log.d(TAG, " onAdvertisingIdentifierLoaded() " + id);
+        fyberParameterDemoHelper.setDeviceId(id);
 
     }
 
     @Override
     public void hideProgress() {
+        mProgressBar.setVisibility(View.GONE);
 
     }
 
     @Override
     public void showProgress() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onError(String message) {
-
+        mTextViewErrorMsg.setVisibility(View.VISIBLE);
+        mTextViewErrorMsg.setText(message);
     }
 
     @Override

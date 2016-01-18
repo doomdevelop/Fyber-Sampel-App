@@ -1,5 +1,6 @@
 package com.doomdev.fybersampel.presentation.exception;
 
+import com.doomdev.fybersampel.data.exception.WrongSignatureException;
 import com.doomdev.fybersampel.data.net.RestApi;
 
 import org.json.JSONException;
@@ -39,7 +40,7 @@ public class ErrorMessageGenerator {
             return error;
         }
         code = e.response().code();
-
+        //TODO: add more specifics error messages for different codes
         return e.getMessage();
     }
 

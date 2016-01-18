@@ -3,9 +3,10 @@
     <!--api connection screen-->
     <string name="api_connection_info">please enter the params to connect with Fyber API</string>
     <string name="api_connection_param_uid">uid</string>
-    <string name="api_connection_param_api_key">API Key</string>
+    <string name="api_connection_param_api_key">api key</string>
     <string name="api_connection_param_appid">appid</string>
-    <string name="api_connection_param_pub0">pub0</string>
+    <string name="api_connection_param_ip">ip</string>
+    <string name="api_connection_param_locale">locale</string>
     <string name="api_connection_connect_btn">connect</string>
     <string name="api_connection_save_btn">connect</string>
 </resources>

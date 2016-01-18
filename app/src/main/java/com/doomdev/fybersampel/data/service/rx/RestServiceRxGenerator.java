@@ -3,6 +3,7 @@ package com.doomdev.fybersampel.data.service.rx;
 
 import android.util.Log;
 
+import com.doomdev.fybersampel.data.exception.WrongSignatureException;
 import com.doomdev.fybersampel.data.net.RestApi;
 import com.doomdev.fybersampel.data.util.Converter;
 import com.doomdev.fybersampel.presentation.view.fragment.FyberConnectionFragment;
@@ -61,13 +62,26 @@ public class RestServiceRxGenerator {
 
             String body = response.body().string();//convert(response.body().charStream());
             Log.d("RestServiceRxGenerator", "body:   " + body);
-
+            int code =  response.code();
+            Log.d("RestServiceRxGenerator", "code:   " + code);
             String signature = response.headers().get("X-Sponsorpay-Response-Signature");
+
             Log.d("RestServiceRxGenerator", " get signanure from RESPONSE: " + signature);//&
             StringBuilder sb = new StringBuilder(body).append(FyberConnectionFragment.API_KEY);
-            String signatureTocheck = Converter.sha1Hash(sb.toString());
-            Log.d("RestServiceRxGenerator", " get signatureTocheck : " + signatureTocheck);
-            return response.newBuilder().addHeader(RestApi.RESPONSE_HEADER_PARAM_ERROR_MESSAGE,body)
+            String signatureToCheck = Converter.sha1Hash(sb.toString());
+            if(signatureToCheck != null){
+                signatureToCheck = signatureToCheck.toLowerCase();
+            }
+            Log.d("RestServiceRxGenerator", " get signatureToCheck : " + signatureToCheck);
+            if(signature != null && signatureToCheck != null && !signature.equals(signatureToCheck)){
+                throw new WrongSignatureException();
+            }
+            if(code != 200){
+                return response.newBuilder().addHeader(RestApi.RESPONSE_HEADER_PARAM_ERROR_MESSAGE,body)
+                        .body(ResponseBody.create(response.body().contentType(), body))
+                        .build();
+            }
+            return response.newBuilder()
                     .body(ResponseBody.create(response.body().contentType(), body))
                     .build();
         }
