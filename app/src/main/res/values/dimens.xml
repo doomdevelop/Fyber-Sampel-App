@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="item_text_margin">4dp</dimen>
     <dimen name="text_size_edit_view">16sp</dimen>
     <dimen name="text_size_input_form">16sp</dimen>
     <dimen name="text_size_input_form_info">16sp</dimen>

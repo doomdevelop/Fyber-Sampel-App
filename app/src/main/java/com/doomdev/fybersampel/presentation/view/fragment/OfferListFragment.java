@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.presentation.model.OfferModel;
 import com.doomdev.fybersampel.presentation.presenter.OfferListPresenter;
-import com.doomdev.fybersampel.presentation.view.OffersView;
+import com.doomdev.fybersampel.presentation.util.FyberModelConverter;
 import com.doomdev.fybersampel.presentation.view.adapter.OffersRecyclerViewAdapter;
-import com.doomdev.fybersampel.presentation.view.fragment.item.DummyContent.DummyItem;
 import com.doomdev.fybersampel.presentation.view.fragment.item.OfferItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import static com.doomdev.fybersampel.presentation.view.fragment.item.DummyContent.*;
+import butterknife.ButterKnife;
+
 
 /**
  * A fragment representing a list of Items.
@@ -28,13 +28,13 @@ import static com.doomdev.fybersampel.presentation.view.fragment.item.DummyConte
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class OfferListFragment extends Fragment implements OfferListPresenter.View {
+public class OfferListFragment extends Fragment implements OfferListPresenter.View{
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private static final String OFFER_MODEL_LIST = "OFFER_MODEL_LIST";
     private OnListFragmentInteractionListener mListener;
+    private ArrayList<OfferModel> offerModels;
+    private FyberModelConverter fyberModelConverter;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,10 +45,10 @@ public class OfferListFragment extends Fragment implements OfferListPresenter.Vi
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static OfferListFragment newInstance(int columnCount) {
+    public static OfferListFragment newInstance(ArrayList<OfferModel> offerModels) {
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putParcelableArrayList(OFFER_MODEL_LIST, offerModels);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,9 +56,9 @@ public class OfferListFragment extends Fragment implements OfferListPresenter.Vi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        fyberModelConverter = new FyberModelConverter();
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            offerModels = getArguments().getParcelableArrayList(OFFER_MODEL_LIST);
         }
     }
 
@@ -66,17 +66,15 @@ public class OfferListFragment extends Fragment implements OfferListPresenter.Vi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_offer_list, container, false);
-
+        ButterKnife.bind(this, view);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            if (offerModels != null && offerModels.size() > 0) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setAdapter(new OffersRecyclerViewAdapter(getContext(),fyberModelConverter.convertOfferModel(offerModels), mListener));
             }
-            recyclerView.setAdapter(new OffersRecyclerViewAdapter(ITEMS, mListener));
         }
         return view;
     }

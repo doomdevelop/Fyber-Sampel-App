@@ -9,4 +9,5 @@
     <string name="api_connection_param_locale">locale</string>
     <string name="api_connection_connect_btn">connect</string>
     <string name="api_connection_save_btn">connect</string>
+    <string name="no_offers_msg">No offers</string>
 </resources>

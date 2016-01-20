@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -145,14 +148,25 @@
             android:textSize="@dimen/text_size_error_msg"
             android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/progres_bar_api_call"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+
     </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/layout_progres_bar_api_call"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+
+            <ProgressBar
+                android:id="@+id/progres_bar_api_call"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                tools:visibility="visible"/>
+        </FrameLayout>
+    </FrameLayout>
 </ScrollView>

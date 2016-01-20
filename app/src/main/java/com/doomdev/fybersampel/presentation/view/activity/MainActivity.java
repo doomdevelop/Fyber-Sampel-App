@@ -6,11 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.doomdev.fybersampel.R;
+import com.doomdev.fybersampel.presentation.model.OfferModel;
 import com.doomdev.fybersampel.presentation.view.fragment.FyberConnectionFragment;
+import com.doomdev.fybersampel.presentation.view.fragment.OfferListFragment;
+import com.doomdev.fybersampel.presentation.view.fragment.item.OfferItem;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements FyberConnectionFragment.OnFragmentInteractionListener, OfferListFragment.OnListFragmentInteractionListener  {
 
     private android.support.v4.app.Fragment fragment;
     @Override
@@ -18,9 +27,19 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setContentView(R.layout.activity_main);
+        configureImageLoader();
         if(savedInstanceState == null){
-            initFragment();
+//            initFragment();
+            changeFragment(FyberConnectionFragment.instantiate(this, FyberConnectionFragment.class.getName()),FyberConnectionFragment.class.getName());
         }
+    }
+
+    private void configureImageLoader(){
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+        .cacheInMemory(true).cacheOnDisk(true).build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+        .defaultDisplayImageOptions(defaultOptions).build();
+        ImageLoader.getInstance().init(config); // Do it on Application start
     }
 
     /**
@@ -50,18 +69,31 @@ public class MainActivity extends AppCompatActivity  {
         super.onDestroy();
     }
 
-
-
-    private void initFragment(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, FyberConnectionFragment.instantiate(this, FyberConnectionFragment.class.getName())).commit();
-    }
     private void changeFragment(android.support.v4.app.Fragment fragment, String name) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment, name).commit();
+        transaction.replace(R.id.fragment_container, fragment, name);
+        if(!(fragment instanceof FyberConnectionFragment)) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
     }
 
+    @Override
+    public void onLoadOfferListFragment(List<OfferModel> offerModelList) {
+        changeFragment(OfferListFragment.newInstance((ArrayList) offerModelList), OfferListFragment.class.getSimpleName());
+    }
 
+    @Override
+    public void onListFragmentInteraction(OfferItem item) {
+
+    }
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

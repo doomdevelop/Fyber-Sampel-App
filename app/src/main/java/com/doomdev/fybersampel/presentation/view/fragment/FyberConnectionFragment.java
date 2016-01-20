@@ -1,23 +1,33 @@
 package com.doomdev.fybersampel.presentation.view.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doomdev.fybersampel.R;
-import com.doomdev.fybersampel.data.pojo.FyberResponse;
-import com.doomdev.fybersampel.data.pojo.Offers;
-import com.doomdev.fybersampel.presentation.util.FyberParameterDemoHelper;
+import com.doomdev.fybersampel.presentation.handler.BufferHandler;
+import com.doomdev.fybersampel.presentation.model.OfferModel;
 import com.doomdev.fybersampel.presentation.presenter.FyberConnectionPresenter;
+
+
+import com.doomdev.fybersampel.presentation.util.FyberParameterDemoHelper;
 import com.doomdev.fybersampel.presentation.util.Params;
+import com.doomdev.fybersampel.presentation.view.Msg;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,6 +47,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     private OnFragmentInteractionListener mListener;
     private FyberConnectionPresenter mPresenter;
     private FyberParameterDemoHelper fyberParameterDemoHelper;
+
     private static final String TAG = FyberConnectionFragment.class.getSimpleName();
     public static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
     public static final String API_KEY_FALSE = "1c915e3b5d42d05136185030892fbb846c27892";
@@ -55,9 +66,11 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     protected EditText mEditTextLocale;
     @Bind(R.id.edit_text_appid)
     protected EditText mEditTextAppid;
-
+    @Bind(R.id.layout_progres_bar_api_call)
+    protected FrameLayout layoutProgress;
     @Bind(R.id.progres_bar_api_call)
     protected ProgressBar mProgressBar;
+
 
 
     public FyberConnectionFragment() {
@@ -84,7 +97,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
         Log.d(TAG, "onCreate()..");
         this.fyberParameterDemoHelper = new FyberParameterDemoHelper();
-        this.mPresenter = new FyberConnectionPresenter(this);
+        this.mPresenter = new FyberConnectionPresenter(new FyberConnectionHandler(this,Looper.getMainLooper()));
         this.mPresenter.loadAdvertisingIdentifier(getContext());
     }
 
@@ -92,7 +105,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_fyber_connection, container, false);
+        View view = inflater.inflate(R.layout.fragment_fyber_connection, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -117,14 +130,16 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
     @OnClick(R.id.btn_connect)
-    protected void callFyberApi(){
-        mProgressBar.setVisibility(View.VISIBLE);
+    protected void callFyberApi() {
+        layoutProgress.setVisibility(View.VISIBLE);
+        mTextViewErrorMsg.setVisibility(View.GONE);
         mPresenter.callFyberApi(fyberParameterDemoHelper.prepareAndGetParams(), API_KEY);
     }
+
     @OnLongClick(R.id.btn_connect)
-    protected boolean loadSampelParameterInFields(){
-//        mEditTextApiKey.setText(FyberDemoCall.Params.APPID);
+    protected boolean loadSampelParameterInFields() {
         mEditTextIp.setText(Params.IP.getValue());
         mEditTextLocale.setText(Params.LOCALE.getValue());
         mEditTextUid.setText(Params.UID.getValue());
@@ -133,26 +148,43 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         return true;
     }
 
-
-
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
     }
 
 
     @Override
     public void onDetach() {
+        Log.d(TAG, " onDetach()... ");
         super.onDetach();
         mListener = null;
+
     }
+    @Override
+    public void onResume() {
+        Log.d(TAG, " onResume()... ");
+        super.onResume();
+        mPresenter.resume();
+    }
+
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    public void onPause() {
+        Log.d(TAG, " onPause()... ");
+        super.onPause();
+        mPresenter.pause();
+
+    }
+
 
     /**
      * Called when the fragment is no longer in use.  This is called
@@ -160,19 +192,19 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
      */
     @Override
     public void onDestroy() {
+        Log.d(TAG, " onDestroy()... ");
         super.onDestroy();
         this.mPresenter.destroy();
-        Log.d(TAG, "onDestroy()..");
+//        this.mHandler.unbind();
     }
 
     @Override
-    public void onOffersLoaded(FyberResponse fyberResponse) {
-        Log.d(TAG, " onAdvertisingIdentifierLoaded(): " + fyberResponse.toString());
-        Log.d(TAG, " **************************  Offers  **********************");
-
-        Offers[] offers = fyberResponse.getOffers();
-        for(Offers offers1 : offers){
-            Log.d(TAG, offers1.toString());
+    public void onOffersLoaded(List<OfferModel> offerModelList) {
+        Log.d(TAG, " onOffersLoaded()... ");
+        if (offerModelList == null) {
+            Toast.makeText(getContext(), getString(R.string.no_offers_msg), Toast.LENGTH_LONG).show();
+        } else if (mListener != null) {
+            mListener.onLoadOfferListFragment(offerModelList);
         }
 
     }
@@ -186,11 +218,10 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     @Override
     public void hideProgress() {
-        mProgressBar.setVisibility(View.GONE);
+        layoutProgress.setVisibility(View.GONE);
 
     }
 
-    @Override
     public void showProgress() {
         mProgressBar.setVisibility(View.VISIBLE);
     }
@@ -206,7 +237,6 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     }
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -219,6 +249,49 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onLoadOfferListFragment(List<OfferModel> offerModelList);
+    }
+
+    /**
+     * This class deliver messages from presenter.
+     *
+     */
+    public static class FyberConnectionHandler extends BufferHandler{
+        FyberConnectionPresenter.View mView;
+        FyberConnectionHandler(FyberConnectionPresenter.View view, Looper looper){
+            super(looper);
+            this.mView = view;
+
+        }
+
+        @Override
+        public void destroy(){
+            super.destroy();
+            this.mView = null;
+            Log.d(TAG, " Handler destroy()..");
+        }
+
+        @Override
+        protected void processMessage(Message msg) {
+        if(mView == null){
+            Log.e(TAG, " handler: mView is null, return");
+            return;
+        }
+            switch (msg.what){
+                case Msg.ON_OFFERS_LOADED:
+                    mView.onOffersLoaded((List<OfferModel>) msg.obj);
+                    Log.d(TAG, " handleMessage()... ");
+                    break;
+                case Msg.ON_ADVERTISING_IDENTIFIER_LOADED:
+                    mView.onAdvertisingIdentifierLoaded((String)msg.obj);
+                    break;
+                case Msg.HIDE_PROGRESS:
+                    mView.hideProgress();
+                    break;
+                case Msg.ON_ERROR:
+                    mView.onError((String) msg.obj);
+                    break;
+            }
+        }
     }
 }
