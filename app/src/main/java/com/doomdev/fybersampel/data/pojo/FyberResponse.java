@@ -1,6 +1,7 @@
 package com.doomdev.fybersampel.data.pojo;
 
 /**
+ * This model is main class representing fyber response and will be automatically created from json response
  * Created by and on 12.01.16.
  */
 public class FyberResponse

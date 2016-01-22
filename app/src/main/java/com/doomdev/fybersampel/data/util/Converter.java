@@ -1,12 +1,7 @@
 package com.doomdev.fybersampel.data.util;
 
-import android.util.Base64;
-import android.util.Log;
-
-import com.doomdev.fybersampel.data.net.RestApi;
 import com.doomdev.fybersampel.data.pojo.request.RequestContent;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,13 +9,24 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * This class contain static methods to convert different inputs
  * Created by and on 13.01.16.
  */
 public class Converter {
     private static final String TAG = Converter.class.getSimpleName();
-    private final static String HEX = "0123456789ABCDEF";
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
+    /**
+     * This method create signature (SHA1) and concatenate values of giving map as url parameter.
+     *
+     * @param map    map with parameter to be set in to the url
+     * @param apiKey api key to concatenate with the parameters string
+     * @return {@link RequestContent} containing signature and valid url
+     */
     public static RequestContent createHashKex(Map<String, String> map,String apiKey) {
+        if (map == null) {
+            return null;
+        }
         String hashkey = null;
         StringBuilder sb = new StringBuilder();
         Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
@@ -39,14 +45,21 @@ public class Converter {
         sb.append(apiKey);
 
         hashkey = sha1Hash(sb.toString());
-        Log.d(TAG, "sha1: " + hashkey);
-        StringBuilder strBuilder = new StringBuilder(RestApi.URL);
+        StringBuilder strBuilder = new StringBuilder(Const.FULL_URL);
         strBuilder.append(url).append("&").append("hashkey=").append(hashkey.toLowerCase());
         return new RequestContent(strBuilder.toString(),hashkey);
     }
 
-    public static String sha1Hash( String toHash )
-    {
+    /**
+     * Encrypt giving String using secure hash algorithm (SHA1)
+     *
+     * @param toHash string to encrypt with SHA1
+     * @return encrpted string with SHA1
+     */
+    public static String sha1Hash(String toHash) {
+        if (toHash == null) {
+            return null;
+        }
         String hash = null;
         try
         {
@@ -69,10 +82,16 @@ public class Converter {
         return hash;
     }
 
-    // http://stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
-    public static String bytesToHex( byte[] bytes )
-    {
+    /**
+     * Convert giving bytes in to hex string
+     *
+     * @param bytes bytes to convert in to hex string
+     * @return converted bytes as hex string
+     */
+    private static String bytesToHex(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
         char[] hexChars = new char[ bytes.length * 2 ];
         for( int j = 0; j < bytes.length; j++ )
         {

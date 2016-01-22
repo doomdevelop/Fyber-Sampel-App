@@ -17,6 +17,7 @@ import rx.Scheduler;
 import rx.observers.TestSubscriber;
 
 /**
+ * Test for {@link UseCase} class
  * Created by and on 15.01.16.
  */
 public class UseCaseTest {
@@ -37,8 +38,17 @@ public class UseCaseTest {
         assertEquals(useCase.getId(), testObserver.getUseCaseId());
     }
 
-    private static class UseCaseTestClass extends UseCase {
+    @Test
+    public void testSubscriptionWhenExecutingUseCase() {
+        TestSubscriber<Integer> testSubscriber = new TestSubscriber<>();
 
+        useCase.execute(testSubscriber);
+        useCase.unsubscribe();
+
+        assertThat(testSubscriber.isUnsubscribed(), is(true));
+    }
+
+    private static class UseCaseTestClass extends UseCase {
 
         protected UseCaseTestClass(Scheduler newThreadScheduler,Scheduler androidThread) {
             super(newThreadScheduler,androidThread);

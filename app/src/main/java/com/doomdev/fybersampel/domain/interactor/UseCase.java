@@ -13,7 +13,7 @@ import rx.subscriptions.Subscriptions;
  * This abstract class represents a execution unit for different use cases (this means any use case
  * in the application should implement this contract).
  * <p/>
- * By convention each UseCase implementation will return the result using a {@link rx.Subscriber}
+ * By convention each UseCase implementation will return the result using a {@link rx.Observer}
  * that will execute its job in a background thread and will post the result in the UI thread.
  * Created by and on 08.01.16.
  */
