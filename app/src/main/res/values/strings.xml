@@ -5,7 +5,7 @@
     <string name="api_connection_param_uid">uid</string>
     <string name="api_connection_param_api_key">api key</string>
     <string name="api_connection_param_appid">appid</string>
-    <string name="api_connection_param_ip">ip</string>
+    <string name="api_connection_param_pub0">custom</string>
     <string name="api_connection_param_locale">locale</string>
     <string name="api_connection_connect_btn">connect</string>
     <string name="api_connection_save_btn">connect</string>

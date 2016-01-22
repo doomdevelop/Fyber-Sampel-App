@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -55,16 +59,16 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     protected EditText mEditTextApiKey;
     @Bind(R.id.edit_text_uid)
     protected EditText mEditTextUid;
-    @Bind(R.id.edit_text_ip)
-    protected EditText mEditTextIp;
-    @Bind(R.id.edit_text_locale)
-    protected EditText mEditTextLocale;
+    @Bind(R.id.edit_text_pub0)
+    protected EditText mEditTextPub0;
     @Bind(R.id.edit_text_appid)
     protected EditText mEditTextAppid;
     @Bind(R.id.layout_progres_bar_api_call)
     protected FrameLayout mLayoutProgress;
     @Bind(R.id.progres_bar_api_call)
     protected ProgressBar mProgressBar;
+    @Bind(R.id.btn_connect)
+    protected Button mBtnConnect;
 
 
     public FyberConnectionFragment() {
@@ -125,6 +129,63 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         super.onViewCreated(view, savedInstanceState);
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEditTextUid.getWindowToken(), 0);
+//        getView().invalidate();
+    }
+
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d(TAG, "afterTextChanged: " + s.toString());
+            if (s.toString() != null) {
+                if (checkAllRequiredTextField()) {
+                    mBtnConnect.setEnabled(true);
+                } else {
+                    mBtnConnect.setEnabled(false);
+                }
+            }
+        }
+    };
+
+    private void addListenerOnEditText() {
+        mEditTextApiKey.addTextChangedListener(mTextWatcher);
+        mEditTextAppid.addTextChangedListener(mTextWatcher);
+        mEditTextPub0.addTextChangedListener(mTextWatcher);
+        mEditTextUid.addTextChangedListener(mTextWatcher);
+
+    }
+
+    private void removeTextChangeedListener() {
+        mEditTextApiKey.removeTextChangedListener(mTextWatcher);
+        mEditTextAppid.removeTextChangedListener(mTextWatcher);
+        mEditTextPub0.removeTextChangedListener(mTextWatcher);
+        mEditTextUid.removeTextChangedListener(mTextWatcher);
+    }
+
+
+    private boolean checkAllRequiredTextField() {
+        return isNotNullAndHasText(mEditTextApiKey)
+                && isNotNullAndHasText(mEditTextAppid)
+                && isNotNullAndHasText(mEditTextPub0)
+                && isNotNullAndHasText(mEditTextUid);
+    }
+
+    private boolean isNotNullAndHasText(EditText editText) {
+        return editText.getText() != null && editText.getText().length() > 0;
+    }
+
     @OnClick(R.id.btn_connect)
     protected void callFyberApi() {
         mLayoutProgress.setVisibility(View.VISIBLE);
@@ -132,13 +193,23 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         mPresenter.callGetOffersFyberApi(mFyberParameterDemoHelper.prepareAndGetParams(), API_KEY);
     }
 
-    @OnLongClick(R.id.btn_connect)
+    private void updateParamsMap() {
+        mFyberParameterDemoHelper.setParam(Params.FORMAT, Params.FORMAT.getValue());
+        mFyberParameterDemoHelper.setParam(Params.APPID, mEditTextAppid.getText().toString());
+        mFyberParameterDemoHelper.setParam(Params.UID, mEditTextUid.getText().toString());
+        mFyberParameterDemoHelper.setParam(Params.PUB0, mEditTextPub0.getText().toString());
+        mFyberParameterDemoHelper.setParam(Params.OFFER_TYPES, Params.OFFER_TYPES.getValue());
+        mFyberParameterDemoHelper.setParam(Params.TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000L));
+        mFyberParameterDemoHelper.setParam(Params.DEVICE_ID, "");
+    }
+
+    @OnLongClick(R.id.edit_text_uid)
     protected boolean loadSampelParameterInFields() {
         //TODO: remove it !
-        mEditTextIp.setText(Params.IP.getValue());
-        mEditTextLocale.setText(Params.LOCALE.getValue());
+        mEditTextPub0.setText(Params.PUB0.getValue());
         mEditTextUid.setText(Params.UID.getValue());
         mEditTextAppid.setText(Params.APPID.getValue());
+        mEditTextApiKey.setText(API_KEY);
         if (getView() != null) {
             getView().requestLayout();
         }
@@ -170,6 +241,13 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         Log.d(TAG, " onResume()... ");
         super.onResume();
         mPresenter.resume();
+        addListenerOnEditText();
+        if (checkAllRequiredTextField()) {
+            mBtnConnect.setEnabled(true);
+        } else {
+            mBtnConnect.setEnabled(false);
+        }
+        hideKeyboard();
     }
 
     /**
@@ -180,7 +258,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         Log.d(TAG, " onPause()... ");
         super.onPause();
         mPresenter.pause();
-
+        removeTextChangeedListener();
     }
 
 

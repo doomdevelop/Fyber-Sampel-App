@@ -88,7 +88,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_ip"
+            android:id="@+id/layout_pub0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_appid"
@@ -98,45 +98,45 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/api_connection_param_ip"
+                android:text="@string/api_connection_param_pub0"
                 android:textSize="@dimen/text_size_input_form_info" />
 
             <EditText
-                android:id="@+id/edit_text_ip"
+                android:id="@+id/edit_text_pub0"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textSize="@dimen/text_size_edit_view" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_locale"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_ip"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+        <!--android:id="@+id/layout_locale"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/layout_pub0"-->
+        <!--android:orientation="horizontal">-->
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/api_connection_param_locale"
-                android:textSize="@dimen/text_size_input_form_info" />
+        <!--<TextView-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="@string/api_connection_param_locale"-->
+        <!--android:textSize="@dimen/text_size_input_form_info" />-->
 
-            <EditText
-                android:id="@+id/edit_text_locale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:textSize="@dimen/text_size_edit_view" />
-        </LinearLayout>
+        <!--<EditText-->
+        <!--android:id="@+id/edit_text_locale"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="3"-->
+        <!--android:textSize="@dimen/text_size_edit_view" />-->
+        <!--</LinearLayout>-->
 
         <Button
             android:id="@+id/btn_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/layout_locale"
+            android:layout_below="@+id/layout_pub0"
             android:text="@string/api_connection_connect_btn" />
 
         <TextView

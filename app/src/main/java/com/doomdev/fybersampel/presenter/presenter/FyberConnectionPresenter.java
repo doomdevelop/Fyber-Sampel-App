@@ -127,11 +127,13 @@ public class FyberConnectionPresenter extends Presenter {
 
         @Override
         public void onNext(FyberResponse offerList) {
+            mHandler.obtainMessage(Msg.HIDE_PROGRESS).sendToTarget();
             if (offerList.getOffers() != null && offerList.getOffers().length > 0) {
-                mHandler.obtainMessage(Msg.ON_EMPTY_OFFERS_LOADED).sendToTarget();
+                mHandler.obtainMessage(Msg.ON_OFFERS_LOADED, mFyberModelConverter.convertFyberResponse(offerList)).sendToTarget();
             } else {
-
+                mHandler.obtainMessage(Msg.ON_EMPTY_OFFERS_LOADED).sendToTarget();
             }
+
         }
     }
 

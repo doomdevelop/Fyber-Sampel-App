@@ -13,6 +13,7 @@ public enum Params {
     IP("ip", "109.235.143.113"),
     OFFER_TYPES("offer_types", "112"),
     TIMESTAMP("timestamp", ""),
+    PUB0("pub0", "campaign2"),
     DEVICE_ID("device_id", "");
 
     private final String key;
