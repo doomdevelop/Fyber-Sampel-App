@@ -8,7 +8,7 @@ import rx.Observable;
 import rx.Scheduler;
 
 /**
- * An {@link UseCase} call fyber api to get offers
+ * An {@link UseCase} loading offers from fyber api
  * Created by and on 09.01.16.
  */
 public class GetFyberOffersUseCase extends UseCase {
@@ -22,7 +22,7 @@ public class GetFyberOffersUseCase extends UseCase {
         this.fyberConnectionRepository = FyberConnectionRepository.getInstance();
     }
 
-    public GetFyberOffersUseCase(final RequestContent requestContent, FyberConnectionRepository fyberConnectionRepository, Scheduler newThreadScheduler, Scheduler androidThread) {
+    protected GetFyberOffersUseCase(final RequestContent requestContent, FyberConnectionRepository fyberConnectionRepository, Scheduler newThreadScheduler, Scheduler androidThread) {
         super(newThreadScheduler, androidThread);
         this.requestContent = requestContent;
         this.fyberConnectionRepository = fyberConnectionRepository;

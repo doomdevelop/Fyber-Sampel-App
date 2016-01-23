@@ -26,7 +26,7 @@ public class CalculateHashKeyUseCase extends UseCase {
         this.apikey = apiKey;
     }
 
-    public CalculateHashKeyUseCase(final Map<String, String> params, final String apiKey, Scheduler newThreadScheduler, Scheduler androidThread) {
+    protected CalculateHashKeyUseCase(final Map<String, String> params, final String apiKey, Scheduler newThreadScheduler, Scheduler androidThread) {
         super(newThreadScheduler, androidThread);
         this.params = params;
         this.apikey = apiKey;

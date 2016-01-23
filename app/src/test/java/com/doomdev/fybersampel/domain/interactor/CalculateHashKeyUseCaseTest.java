@@ -1,7 +1,6 @@
 package com.doomdev.fybersampel.domain.interactor;
 
-import com.doomdev.fybersampel.presenter.util.FyberParameterDemoHelper;
-import com.doomdev.fybersampel.presenter.view.fragment.FyberConnectionFragment;
+import com.doomdev.fybersampel.presenter.util.FyberParameterHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +29,10 @@ public class CalculateHashKeyUseCaseTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        FyberParameterDemoHelper fyberParameterDemoHelper = new FyberParameterDemoHelper();
-        fyberParameterDemoHelper.setDeviceId("123456789");
-        fyberParameterDemoHelper.addTimeStampToTheMap();
-        calculateHashKeyUseCase = new CalculateHashKeyUseCase(fyberParameterDemoHelper.prepareAndGetParams(), FyberConnectionFragment.API_KEY, newThreadScheduler,
+        FyberParameterHelper fyberParameterHelper = new FyberParameterHelper();
+        fyberParameterHelper.setDeviceId("123456789");
+        fyberParameterHelper.addTimeStampToTheMap();
+        calculateHashKeyUseCase = new CalculateHashKeyUseCase(fyberParameterHelper.prepareAndGetParams(), FyberParameterHelper.API_KEY, newThreadScheduler,
                 androidThread);
     }
 

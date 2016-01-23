@@ -2,7 +2,7 @@ package com.doomdev.fybersampel.domain.interactor;
 
 import com.doomdev.fybersampel.data.pojo.request.RequestContent;
 import com.doomdev.fybersampel.data.repository.FyberConnectionRepository;
-import com.doomdev.fybersampel.presenter.util.FyberParameterDemoHelper;
+import com.doomdev.fybersampel.presenter.util.FyberParameterHelper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,9 +38,9 @@ public class GetFyberOffersUseCaseTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        FyberParameterDemoHelper fyberParameterDemoHelper = new FyberParameterDemoHelper();
-        fyberParameterDemoHelper.setDeviceId("123456789");
-        fyberParameterDemoHelper.addTimeStampToTheMap();
+        FyberParameterHelper fyberParameterHelper = new FyberParameterHelper();
+        fyberParameterHelper.setDeviceId("123456789");
+        fyberParameterHelper.addTimeStampToTheMap();
         when(requestContent.getSignature()).thenReturn("");
         when(requestContent.getUrl()).thenReturn("");
         getFyberOffersUseCase = new GetFyberOffersUseCase(requestContent, fyberConnectionRepository, newThreadScheduler, androidThread);

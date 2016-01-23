@@ -4,7 +4,7 @@ package com.doomdev.fybersampel.data.service.rx;
 import com.doomdev.fybersampel.data.exception.WrongSignatureException;
 import com.doomdev.fybersampel.data.util.Const;
 import com.doomdev.fybersampel.data.util.Converter;
-import com.doomdev.fybersampel.presenter.view.fragment.FyberConnectionFragment;
+import com.doomdev.fybersampel.presenter.util.FyberParameterHelper;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -77,7 +77,7 @@ public class RestServiceRxGenerator {
             int code =  response.code();
             String signature = response.headers().get("X-Sponsorpay-Response-Signature");
 
-            StringBuilder sb = new StringBuilder(body).append(FyberConnectionFragment.API_KEY);
+            StringBuilder sb = new StringBuilder(body).append(FyberParameterHelper.API_KEY);
             String signatureToCheck = Converter.sha1Hash(sb.toString());
             if(signatureToCheck != null){
                 signatureToCheck = signatureToCheck.toLowerCase();

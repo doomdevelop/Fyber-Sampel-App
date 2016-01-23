@@ -23,7 +23,7 @@ import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.presenter.handler.BufferHandler;
 import com.doomdev.fybersampel.presenter.model.OfferModel;
 import com.doomdev.fybersampel.presenter.presenter.FyberConnectionPresenter;
-import com.doomdev.fybersampel.presenter.util.FyberParameterDemoHelper;
+import com.doomdev.fybersampel.presenter.util.FyberParameterHelper;
 import com.doomdev.fybersampel.presenter.util.Params;
 import com.doomdev.fybersampel.presenter.view.Msg;
 
@@ -46,11 +46,9 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     private OnFragmentInteractionListener mListener;
     private FyberConnectionPresenter mPresenter;
-    private FyberParameterDemoHelper mFyberParameterDemoHelper;
+    private FyberParameterHelper mFyberParameterHelper;
 
     private static final String TAG = FyberConnectionFragment.class.getSimpleName();
-    public static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
-    public static final String API_KEY_FALSE = "1c915e3b5d42d05136185030892fbb846c27892";
 
 
     @Bind(R.id.text_view_error_msg)
@@ -94,7 +92,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         setRetainInstance(true);
 
         Log.d(TAG, "onCreate()..");
-        this.mFyberParameterDemoHelper = new FyberParameterDemoHelper();
+        this.mFyberParameterHelper = new FyberParameterHelper();
         this.mPresenter = new FyberConnectionPresenter(new FyberConnectionHandler(this, Looper.getMainLooper()));
         this.mPresenter.loadAdvertisingIdentifier(getContext());
     }
@@ -151,6 +149,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
             Log.d(TAG, "afterTextChanged: " + s.toString());
             if (s.toString() != null) {
                 if (checkAllRequiredTextField()) {
+                    updateParamsMap();
                     mBtnConnect.setEnabled(true);
                 } else {
                     mBtnConnect.setEnabled(false);
@@ -188,19 +187,21 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
 
     @OnClick(R.id.btn_connect)
     protected void callFyberApi() {
+        mBtnConnect.setEnabled(false);
         mLayoutProgress.setVisibility(View.VISIBLE);
         mTextViewErrorMsg.setVisibility(View.GONE);
-        mPresenter.callGetOffersFyberApi(mFyberParameterDemoHelper.prepareAndGetParams(), API_KEY);
+        mPresenter.callGetOffersFyberApi(mFyberParameterHelper.prepareAndGetParams(), mFyberParameterHelper.getApiKey());
     }
 
     private void updateParamsMap() {
-        mFyberParameterDemoHelper.setParam(Params.FORMAT, Params.FORMAT.getValue());
-        mFyberParameterDemoHelper.setParam(Params.APPID, mEditTextAppid.getText().toString());
-        mFyberParameterDemoHelper.setParam(Params.UID, mEditTextUid.getText().toString());
-        mFyberParameterDemoHelper.setParam(Params.PUB0, mEditTextPub0.getText().toString());
-        mFyberParameterDemoHelper.setParam(Params.OFFER_TYPES, Params.OFFER_TYPES.getValue());
-        mFyberParameterDemoHelper.setParam(Params.TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000L));
-        mFyberParameterDemoHelper.setParam(Params.DEVICE_ID, "");
+        mFyberParameterHelper.setParam(Params.FORMAT, Params.FORMAT.getValue());
+        mFyberParameterHelper.setParam(Params.APPID, mEditTextAppid.getText().toString());
+        mFyberParameterHelper.setParam(Params.UID, mEditTextUid.getText().toString());
+        mFyberParameterHelper.setParam(Params.PUB0, mEditTextPub0.getText().toString());
+        mFyberParameterHelper.setParam(Params.OFFER_TYPES, Params.OFFER_TYPES.getValue());
+        mFyberParameterHelper.setParam(Params.TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000L));
+        mFyberParameterHelper.setParam(Params.DEVICE_ID, "");
+
     }
 
     @OnLongClick(R.id.edit_text_uid)
@@ -209,7 +210,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         mEditTextPub0.setText(Params.PUB0.getValue());
         mEditTextUid.setText(Params.UID.getValue());
         mEditTextAppid.setText(Params.APPID.getValue());
-        mEditTextApiKey.setText(API_KEY);
+        mEditTextApiKey.setText(FyberParameterHelper.API_KEY);
         if (getView() != null) {
             getView().requestLayout();
         }
@@ -287,11 +288,12 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
     @Override
     public void onAdvertisingIdentifierLoaded(String id) {
         Log.d(TAG, " onAdvertisingIdentifierLoaded() " + id);
-        mFyberParameterDemoHelper.setDeviceId(id);
+        mFyberParameterHelper.setDeviceId(id);
     }
 
     @Override
     public void hideProgress() {
+        mBtnConnect.setEnabled(false);
         mLayoutProgress.setVisibility(View.GONE);
 
     }

@@ -54,7 +54,9 @@ public class FyberConnectionPresenter extends Presenter {
 
             @Override
             public void onError(Throwable e) {
+
                 super.onError(e);
+                mHandler.obtainMessage(Msg.ON_ERROR, ErrorMessageGenerator.generateMessage(e)).sendToTarget();
             }
 
             @Override

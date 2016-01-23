@@ -7,11 +7,14 @@ import java.util.TreeMap;
  * Class to store temporary map with url parameters.
  * Created by and on 17.01.16.
  */
-public class FyberParameterDemoHelper {
+public class FyberParameterHelper {
+    public static final String API_KEY = "1c915e3b5d42d05136185030892fbb846c278927";
+    public static final String API_KEY_FALSE = "1c915e3b5d42d05136185030892fbb846c27892";
+    private String apiKey = null;
     private Map<String, String> mMapParams = new TreeMap<>();
     private String deviceId = null;
 
-    public FyberParameterDemoHelper(){
+    public FyberParameterHelper() {
         createMap();
     }
 
@@ -26,6 +29,14 @@ public class FyberParameterDemoHelper {
         mMapParams.put(Params.PUB0.getKey(), Params.PUB0.getValue());
         mMapParams.put(Params.TIMESTAMP.getKey(),"");
         mMapParams.put(Params.DEVICE_ID.getKey(), "");
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     public void setDeviceId(String deviceid){

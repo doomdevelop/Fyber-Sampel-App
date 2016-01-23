@@ -17,10 +17,13 @@ import rx.Observable;
  */
 public class FyberConnectionRepository {
     //todo: currently this class is very simple. In case having DataBase, caching system would be more useful to implement repository pattern here
-    private static FyberConnectionRepository ourInstance = new FyberConnectionRepository();
+    private static FyberConnectionRepository repository = null;
 
-    public static FyberConnectionRepository getInstance() {
-        return ourInstance;
+    public synchronized static FyberConnectionRepository getInstance() {
+        if (repository == null) {
+            return new FyberConnectionRepository();
+        }
+        return repository;
     }
 
     public Observable<FyberResponse> getFyberOffers(@NonNull RequestContent requestContent) {
