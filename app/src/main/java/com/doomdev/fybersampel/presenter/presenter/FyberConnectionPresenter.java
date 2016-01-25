@@ -13,10 +13,10 @@ import com.doomdev.fybersampel.domain.interactor.UseCase;
 import com.doomdev.fybersampel.presenter.exception.ErrorMessageGenerator;
 import com.doomdev.fybersampel.presenter.handler.BufferHandler;
 import com.doomdev.fybersampel.presenter.model.OfferModel;
+import com.doomdev.fybersampel.presenter.util.EspressoIdlingResource;
 import com.doomdev.fybersampel.presenter.util.FyberModelConverter;
 import com.doomdev.fybersampel.presenter.view.Msg;
 import com.doomdev.fybersampel.presenter.view.fragment.FyberConnectionFragment;
-
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +44,10 @@ public class FyberConnectionPresenter extends Presenter {
      * @param apiKey the fyber api key
      */
     public void callGetOffersFyberApi(final Map<String, String> params, final String apiKey) {
+        EspressoIdlingResource.increment();
         UseCase useCase = new CalculateHashKeyUseCase(params, apiKey);
+//        CountingIdlingResource countingResource = new CountingIdlingResource("GetOffer");
+
         useCase.execute(new DefaultObserver<RequestContent>() {
             @Override
             public void onCompleted() {

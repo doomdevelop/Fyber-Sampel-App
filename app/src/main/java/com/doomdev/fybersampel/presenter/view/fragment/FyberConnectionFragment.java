@@ -23,6 +23,7 @@ import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.presenter.handler.BufferHandler;
 import com.doomdev.fybersampel.presenter.model.OfferModel;
 import com.doomdev.fybersampel.presenter.presenter.FyberConnectionPresenter;
+import com.doomdev.fybersampel.presenter.util.EspressoIdlingResource;
 import com.doomdev.fybersampel.presenter.util.FyberParameterHelper;
 import com.doomdev.fybersampel.presenter.util.Params;
 import com.doomdev.fybersampel.presenter.view.Msg;
@@ -81,8 +82,6 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
      */
     public static FyberConnectionFragment newInstance() {
         FyberConnectionFragment fragment = new FyberConnectionFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -201,6 +200,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         mFyberParameterHelper.setParam(Params.OFFER_TYPES, Params.OFFER_TYPES.getValue());
         mFyberParameterHelper.setParam(Params.TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000L));
         mFyberParameterHelper.setParam(Params.DEVICE_ID, "");
+        mFyberParameterHelper.setApiKey(mEditTextApiKey.getText().toString());
 
     }
 
@@ -356,6 +356,7 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
             switch (msg.what) {
                 case Msg.ON_OFFERS_LOADED:
                     mView.onOffersLoaded((List<OfferModel>) msg.obj);
+                    EspressoIdlingResource.decrement();
                     break;
                 case Msg.ON_ADVERTISING_IDENTIFIER_LOADED:
                     mView.onAdvertisingIdentifierLoaded((String) msg.obj);
@@ -365,9 +366,11 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
                     break;
                 case Msg.ON_ERROR:
                     mView.onError((String) msg.obj);
+                    EspressoIdlingResource.decrement();
                     break;
                 case Msg.ON_EMPTY_OFFERS_LOADED:
                     mView.onOffersLoaded(null);
+                    EspressoIdlingResource.decrement();
                     break;
             }
         }

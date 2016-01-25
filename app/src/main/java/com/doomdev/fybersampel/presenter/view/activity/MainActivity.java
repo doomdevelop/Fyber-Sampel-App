@@ -1,5 +1,7 @@
 package com.doomdev.fybersampel.presenter.view.activity;
 
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 
 import com.doomdev.fybersampel.R;
 import com.doomdev.fybersampel.presenter.model.OfferModel;
+import com.doomdev.fybersampel.presenter.util.EspressoIdlingResource;
 import com.doomdev.fybersampel.presenter.view.fragment.FyberConnectionFragment;
 import com.doomdev.fybersampel.presenter.view.fragment.OfferListFragment;
 import com.doomdev.fybersampel.presenter.view.fragment.item.OfferItem;
@@ -95,5 +98,9 @@ public class MainActivity extends AppCompatActivity implements FyberConnectionFr
         } else {
             super.onBackPressed();
         }
+    }
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }
