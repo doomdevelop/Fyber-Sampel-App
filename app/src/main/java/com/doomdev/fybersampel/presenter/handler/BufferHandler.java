@@ -11,9 +11,6 @@ import java.util.Vector;
  * Message Handler class that supports buffering up of messages when the
  * activity is paused i.e. in the background.
  *
- * Created by and on 19.01.16.
- *
- *
  */
 public abstract class BufferHandler extends Handler {
     protected BufferHandler(){

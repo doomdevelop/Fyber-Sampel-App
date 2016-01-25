@@ -4,7 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Class to store temporary map with url parameters.
+ * Class to create {@link TreeMap} where keys are url parameter names and values url parameter values.
+ * The instance has already
  * Created by and on 17.01.16.
  */
 public class FyberParameterHelper {
@@ -39,8 +40,8 @@ public class FyberParameterHelper {
         this.apiKey = apiKey;
     }
 
-    public void setDeviceId(String deviceid){
-        this.deviceId = deviceid;
+    public void setDeviceId(String deviceId){
+        this.deviceId = deviceId;
         mMapParams.put(Params.DEVICE_ID.getKey(),this.deviceId );
     }
     public void addTimeStampToTheMap(){

@@ -198,24 +198,11 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
         mFyberParameterHelper.setParam(Params.UID, mEditTextUid.getText().toString());
         mFyberParameterHelper.setParam(Params.PUB0, mEditTextPub0.getText().toString());
         mFyberParameterHelper.setParam(Params.OFFER_TYPES, Params.OFFER_TYPES.getValue());
-        mFyberParameterHelper.setParam(Params.TIMESTAMP, String.valueOf(System.currentTimeMillis() / 1000L));
         mFyberParameterHelper.setParam(Params.DEVICE_ID, "");
         mFyberParameterHelper.setApiKey(mEditTextApiKey.getText().toString());
 
     }
 
-    @OnLongClick(R.id.edit_text_uid)
-    protected boolean loadSampelParameterInFields() {
-        //TODO: remove it !
-        mEditTextPub0.setText(Params.PUB0.getValue());
-        mEditTextUid.setText(Params.UID.getValue());
-        mEditTextAppid.setText(Params.APPID.getValue());
-        mEditTextApiKey.setText(FyberParameterHelper.API_KEY);
-        if (getView() != null) {
-            getView().requestLayout();
-        }
-        return true;
-    }
 
     @Override
     public void onAttach(Context context) {

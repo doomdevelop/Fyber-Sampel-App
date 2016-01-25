@@ -125,7 +125,7 @@ public class FyberConnectionPresenter extends Presenter {
         @Override
         public void onError(Throwable e) {
 //            e.printStackTrace();
-            Log.d(TAG, this.getClass().getSimpleName()+" onError().." + e.getMessage() + " " + e.toString());
+            Log.d(TAG, this.getClass().getSimpleName() + " onError().." + e.getMessage() + " " + e.toString());
             mHandler.obtainMessage(Msg.HIDE_PROGRESS).sendToTarget();
             mHandler.obtainMessage(Msg.ON_ERROR, ErrorMessageGenerator.generateMessage(e)).sendToTarget();
         }

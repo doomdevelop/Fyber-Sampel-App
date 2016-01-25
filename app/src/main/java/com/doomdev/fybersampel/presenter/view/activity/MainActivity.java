@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements FyberConnectionFr
         setContentView(R.layout.activity_main);
         configureImageLoader();
         if(savedInstanceState == null){
-//            initFragment();
             changeFragment(FyberConnectionFragment.instantiate(this, FyberConnectionFragment.class.getName()),FyberConnectionFragment.class.getName());
         }
     }
@@ -99,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements FyberConnectionFr
             super.onBackPressed();
         }
     }
+
     @VisibleForTesting
     public IdlingResource getCountingIdlingResource() {
         return EspressoIdlingResource.getIdlingResource();

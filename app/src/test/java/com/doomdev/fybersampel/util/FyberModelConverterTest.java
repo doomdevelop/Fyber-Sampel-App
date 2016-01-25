@@ -1,8 +1,9 @@
-package com.doomdev.fybersampel.presenter.util;
+package com.doomdev.fybersampel.util;
 
 import com.doomdev.fybersampel.data.pojo.FyberResponse;
 import com.doomdev.fybersampel.data.pojo.Offers;
 import com.doomdev.fybersampel.presenter.model.OfferModel;
+import com.doomdev.fybersampel.presenter.util.FyberModelConverter;
 import com.doomdev.fybersampel.presenter.view.fragment.item.OfferItem;
 
 import org.junit.Assert;
