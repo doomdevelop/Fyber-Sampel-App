@@ -96,6 +96,7 @@ public class FyberConnectionFragmentTest {
         onView(withId(R.id.text_view_error_msg)).check(matches(isDisplayed()));
 
     }
+
     public enum TestParams {
 
         FORMAT("format", "json"),

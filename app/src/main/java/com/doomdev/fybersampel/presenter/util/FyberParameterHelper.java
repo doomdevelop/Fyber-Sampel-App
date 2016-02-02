@@ -40,7 +40,7 @@ public class FyberParameterHelper {
         this.apiKey = apiKey;
     }
 
-    public void setDeviceId(String deviceId){
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
         mMapParams.put(Params.DEVICE_ID.getKey(),this.deviceId );
     }
