@@ -14,15 +14,15 @@ public abstract class Presenter<T extends UseCase> {
     protected final SparseArray<T> USE_CASES_LIST = new SparseArray<>();
 
     /**
-     *  Add useCase in to the list with currently active usecases
-     * @param useCase to add in to the list with currently active usecases
+     *  Add useCase in to the list with currently active use cases
+     * @param useCase to add in to the list with currently active use cases
      */
     protected void addUseCase(T useCase) {
         USE_CASES_LIST.append(useCase.getId(),useCase);
     }
 
     /**
-     *  Remove useCase with giving id from the list with currently active usecases
+     *  Remove useCase with giving id from the list with currently active use cases
      * @param id of ucecase to remove
      */
     protected void removeUseCase(int id) {

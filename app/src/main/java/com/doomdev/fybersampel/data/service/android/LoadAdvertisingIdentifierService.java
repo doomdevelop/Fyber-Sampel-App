@@ -27,7 +27,7 @@ public class LoadAdvertisingIdentifierService {
     }
 
     private Observable<String> getAdvertisingIdInfo() {
-        return Observable.create(new  Observable. OnSubscribe<String>() {
+        return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 try {

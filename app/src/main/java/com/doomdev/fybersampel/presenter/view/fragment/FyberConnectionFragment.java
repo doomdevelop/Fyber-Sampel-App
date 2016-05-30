@@ -236,8 +236,46 @@ public class FyberConnectionFragment extends Fragment implements FyberConnection
             mBtnConnect.setEnabled(false);
         }
         hideKeyboard();
+        setSampleDataInToTextFields();
     }
 
+    private void setSampleDataInToTextFields() {
+
+
+        mEditTextApiKey.setText(FyberParameterHelper.API_KEY);
+        mEditTextAppid.setText(TestParams.APPID.getValue());
+        mEditTextPub0.setText(TestParams.PUB0.getValue());
+        mEditTextUid.setText(TestParams.UID.getValue());
+    }
+
+    public enum TestParams {
+
+        FORMAT("format", "json"),
+        APPID("appid", "2070"),
+        UID("uid", "spiderman"),
+        LOCALE("locale", "de"),
+        IP("ip", "109.235.143.113"),
+        OFFER_TYPES("offer_types", "112"),
+        TIMESTAMP("timestamp", ""),
+        PUB0("pub0", "campaign2"),
+        DEVICE_ID("device_id", "");
+
+        private final String key;
+        private final String value;
+
+        public String getKey() {
+            return key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        TestParams(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
     /**
      * Dispatch onPause() to fragments.
      */
