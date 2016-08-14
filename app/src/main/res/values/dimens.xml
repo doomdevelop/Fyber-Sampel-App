@@ -10,6 +10,11 @@
     <dimen name="text_size_error_msg">14sp</dimen>
     <dimen name="text_size_main_info">20sp</dimen>
     <dimen name="fragment_main_padding">8dp</dimen>
+
     <!-- added by odroid -->
     <dimen name="fragment_padding_fake">8dp</dimen>
+
+    <!-- Data from owner -->
+    <dimen name="fragment_main_padding_test">8dp</dimen>
+
 </resources>
