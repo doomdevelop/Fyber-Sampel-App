@@ -12,4 +12,5 @@
     <dimen name="fragment_main_padding">8dp</dimen>
 <!-- odroid change br test -->
  <dimen name="fragment_main_padding_">8dp</dimen>
+ <dimen name="fragment_main_padding__">8dp</dimen>
 </resources>
